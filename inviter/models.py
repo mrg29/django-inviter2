@@ -3,14 +3,17 @@ import hashlib
 
 
 class OptOutManager(models.Manager):
+    def _hash_email(self, email):
+        email_bytes = email.encode('utf-8')
+        return hashlib.sha1(email_bytes).hexdigest()
+
     def is_blocked(self, email=None):
         """ Check if a given email address is on the block list. """
-        return self.filter(hash=hashlib.sha1(email).hexdigest()).count() > 0
+        return self.filter(hash=self._hash_email(email)).count() > 0
 
     def create(self, email=None):
         """ Create an opt out. """
-        hash = hashlib.sha1(email).      hexdigest()
-        return super(OptOutManager, self).create(hash=hash)
+        return super(OptOutManager, self).create(hash=self._hash_email(email))
 
 
 class OptOut(models.Model):

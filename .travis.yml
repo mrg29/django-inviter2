@@ -5,9 +5,15 @@ python:
   - "3.2"
   - "3.3"
 env:
-  - DJANGO_VERSION=1.4
-  - DJANGO_VERSION=1.5
-  - DJANGO_VERSION=1.6
+  - DJANGO_VERSION="1.4"
+  - DJANGO_VERSION="1.5"
+  - DJANGO_VERSION="1.6"
+matrix:
+  exclude:
+    - python: "3.2"
+      env: DJANGO_VERSION="1.4"
+    - python: "3.3"
+      env: DJANGO_VERSION="1.4"
 # command to install dependencies
 install: 
     - pip install -r requirements.txt --use-mirrors

@@ -4,16 +4,19 @@ when you run "manage.py test".
 
 Replace this with more appropriate tests for your application.
 """
+import shortuuid
+
+from six.moves.urllib.parse import urlparse
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils.http import int_to_base36
-from inviter.models import OptOut
-from inviter.utils import invite, token_generator
-import shortuuid
-import urlparse
+
+from .models import OptOut
+from .utils import invite, token_generator
 
 
 class InviteTest(TestCase):
@@ -96,7 +99,7 @@ class InviteTest(TestCase):
         resp = self.client.post(url, {})
         self.assertEqual(302, resp.status_code, resp.status_code)
         self.assertEqual(reverse('inviter:opt-out-done'),
-                         urlparse.urlparse(resp['Location']).path)
+                         urlparse(resp['Location']).path)
         self.assertEqual(2, User.objects.count())
 
         user, sent = invite("foo@example.com", self.inviter)
