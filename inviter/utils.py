@@ -1,7 +1,6 @@
 from django import template
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.utils.http import int_to_base36
@@ -33,7 +32,7 @@ def send_invite(invitee, inviter, url=None, opt_out_url=None, **kwargs):
     """
     ctx = {'invitee': invitee, 'inviter': inviter}
     ctx.update(kwargs)
-    ctx.update(site=Site.objects.get_current(), url=url)
+    ctx.update(url=url)
     ctx = template.Context(ctx)
 
     subject_template = kwargs.pop('subject_template',

@@ -1,2 +1,5 @@
 testproject/test.sqlite
 dist/
+*.egg
+*.egg-info
+*.py[co]
