@@ -1,7 +1,7 @@
-Welcome to django-inviter's documentation!
-==========================================
+Welcome to django-inviter2's documentation!
+===========================================
 
-django-inviter allows you to invite users to your Django application. Invited
+django-inviter2 allows you to invite users to your Django application. Invited
 users are saved as inactive users in your database and activated upon
 registration.
 
@@ -10,48 +10,48 @@ Installation
 
 ::
 
-    pip install django-inviter
+    pip install django-inviter2
     
 
 Configuration
 -------------
 
-Add ``inviter`` and ``django.contrib.sites`` to your ``INSTALLED_APPS``
+Add ``inviter2`` to your ``INSTALLED_APPS``
 
 ::
 
     INSTALLED_APPS = (
-        'django.contrib.sites',
-        'inviter'
+        'inviter2'
     )
     
-Include :attr:`inviter.urls` into your root ``urls.py`` file under the ``inviter``
-namespace
+Include :attr:`inviter2.urls` into your root ``urls.py`` file under the ``inviter2`` namespace
   
 ::
     
-    urlpatterns = patterns('',
-        url('^invites/', include('inviter.urls', namespace = 'inviter'))
+    urlpatterns = patterns(
+        # [...]
+        url('^invites/', include('inviter2.urls', namespace='inviter2'),
+    )
 
 
    
 Usage
 -----
 
-To invite people make use of :attr:`inviter.utils.invite`
+To invite people make use of :attr:`inviter2.utils.invite`
 
 ::
 
-    from inviter.utils import invite
+    from inviter2.utils import invite
     
-    invite("foo@example.com", request.user, current_time = datetime.now())
+    invite("foo@example.com", request.user, current_time=datetime.now())
 
-:attr:`inviter.utils.invite` also allows you to make use of a custom email sending
-function, say to send HTML emails
+:attr:`inviter2.utils.invite` also allows you to make use of a custom email
+sending function, say to send HTML emails
 
 :: 
 
-    from inviter.utils import invite
+    from inviter2.utils import invite
     
     def sendhtml(invitee, inviter, **kwargs):
         # Load templates, send the email here
@@ -63,23 +63,25 @@ A useful application of this is keeping track of who invites whom:
 
 ::
 
-    from inviter import utils
+    from inviter2 import utils
     from app.models import Invites
     
     def send(invitee, inviter, **kwargs):
-        Invites.objects.get_or_create(invitee = invitee, inviter = inviter)
+        Invites.objects.get_or_create(invitee=invitee, inviter=inviter)
         utils.send_invite(invitee, inviter, **kwargs)
 
     utils.invite("foo@example.com", request.user, sendfn=send)       
     
-Consult :attr:`inviter.utils.invite` and :attr:`inviter.utils.send_invite` for more 
+Consult :attr:`inviter2.utils.invite` and
+:attr:`inviter2.utils.send_invite` for more 
 information.
 
-By default :attr:`inviter.utils.send_invite` will render ``inviter/email/subject.txt``
-and ``inviter/email/body.txt`` for the email.
+By default :attr:`inviter2.utils.send_invite` will render
+``inviter2/email/subject.txt``
+and ``inviter2/email/body.txt`` for the email.
 
-``/inviter/register.html`` and ``inviter/done.html`` are rendered when 
-registering respectively when done.
+``templates/inviter2/register.html`` and ``templates/inviter2/done.html``
+are rendered when registering respectively when done.
 
 If you need a post registration hook, override the registration form with the
 settings below.
@@ -92,14 +94,14 @@ There are a couple of editable settings
 
 .. attribute:: INVITER_FORM
 
-    :Default: :class:`inviter.forms.RegistrationForm`
+    :Default: :class:`inviter2.forms.RegistrationForm`
     :type: str
     
     The form to be used when an invited user signs up.
     
 .. attribute:: INVITER_REDIRECT
     
-    :Default: ``'inviter:done'``
+    :Default: ``'inviter2:done'``
     :type: str
     
     The URL to redirect the user to when the signup completes. This is either a
@@ -108,7 +110,7 @@ There are a couple of editable settings
     
 .. attribute:: INVITER_TOKEN_GENERATOR
 
-    :Default: ``'inviter.tokens.generator'``
+    :Default: ``'inviter2.tokens.generator'``
     :type: str
     
     The generator used to create a token which is used to assemble an invite
@@ -126,6 +128,4 @@ API
 .. toctree::
     :maxdepth: 3
     
-    inviter    
-
-Made by `Caffeinehit Ltd <http://www.caffeinehit.com/>`_. 
+    inviter2

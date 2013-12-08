@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
 from setuptools import setup, find_packages
-import inviter
+import inviter2
 
 setup(
     name='django-inviter2',
-    version=inviter.__version__,
+    version=inviter2.__version__,
     description='Invite users to your Django apps',
     long_description=open('README.md').read(),
     author='Michael J Schultz',

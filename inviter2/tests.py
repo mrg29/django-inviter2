@@ -8,7 +8,6 @@ import shortuuid
 
 from six.moves.urllib.parse import urlparse
 
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import mail
 from django.core.urlresolvers import reverse
@@ -21,14 +20,9 @@ from .utils import invite, token_generator
 
 class InviteTest(TestCase):
     def setUp(self):
-        self.original_email_backend = settings.EMAIL_BACKEND
-        settings.EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
         self.inviter = User.objects.create(username=shortuuid.uuid())
         self.existing = User.objects.create(username=shortuuid.uuid(),
                                             email='existing@example.com')
-
-    def tearDown(self):
-        settings.EMAIL_BACKEND = self.original_email_backend
 
     def test_inviting(self):
         user, sent = invite("foo@example.com", self.inviter)
@@ -63,7 +57,7 @@ class InviteTest(TestCase):
         self.assertTrue(sent)
         url_parts = int_to_base36(user.id), token_generator.make_token(user)
 
-        url = reverse('inviter:register', args=url_parts)
+        url = reverse('inviter2:register', args=url_parts)
 
         resp = self.client.get(url)
 
@@ -78,7 +72,7 @@ class InviteTest(TestCase):
 
         self.client.login(username='testuser', password='test-1234')
 
-        resp = self.client.get(reverse('inviter:done'))
+        resp = self.client.get(reverse('inviter2:done'))
 
         self.assertEqual(200, resp.status_code, resp.status_code)
 
@@ -91,14 +85,14 @@ class InviteTest(TestCase):
         self.assertEqual(3, User.objects.count())
 
         url_parts = int_to_base36(user.id), token_generator.make_token(user)
-        url = reverse('inviter:opt-out', args=url_parts)
+        url = reverse('inviter2:opt-out', args=url_parts)
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code, resp.status_code)
 
         resp = self.client.post(url, {})
         self.assertEqual(302, resp.status_code, resp.status_code)
-        self.assertEqual(reverse('inviter:opt-out-done'),
+        self.assertEqual(reverse('inviter2:opt-out-done'),
                          urlparse(resp['Location']).path)
         self.assertEqual(2, User.objects.count())
 

@@ -5,7 +5,5 @@ source = .
 
 [report]
 omit =
-  manage.py
-  example/*settings.py
-  example/wsgi.py
-  */migrations/*
+  setup.py
+  example/*

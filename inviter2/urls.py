@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, url
-from inviter.views import Register, Done, OptOut, OptOutDone
+
+from .views import Register, Done, OptOut, OptOutDone
 
 urlpatterns = patterns(
     '',

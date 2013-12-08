@@ -1,25 +1,25 @@
 Forms
 -----
-.. automodule:: inviter.forms
+.. automodule:: inviter2.forms
     :members:
 
 Models
 ------
-.. automodule:: inviter.models
+.. automodule:: inviter2.models
     :members:
 
 URLs
 ----
-.. automodule:: inviter.urls
+.. automodule:: inviter2.urls
     :members:
 
 Utils
 -----
-.. automodule:: inviter.utils
+.. automodule:: inviter2.utils
     :members:
 
 Views
 -----
-.. automodule:: inviter.views
+.. automodule:: inviter2.views
     :members:
 

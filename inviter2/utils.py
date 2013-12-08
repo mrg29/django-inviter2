@@ -1,12 +1,14 @@
+import shortuuid
+
 from django import template
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.utils.http import int_to_base36
-from inviter.models import OptOut
-from inviter.views import import_attribute, TOKEN_GENERATOR
-import shortuuid
+
+from .models import OptOut
+from .views import import_attribute, TOKEN_GENERATOR
 
 
 FROM_EMAIL = getattr(settings, 'INVITER_FROM_EMAIL',
@@ -18,7 +20,7 @@ token_generator = import_attribute(TOKEN_GENERATOR)
 def send_invite(invitee, inviter, url=None, opt_out_url=None, **kwargs):
     """
     Send the default invitation email assembled from
-    ``inviter/email/subject.txt`` and ``inviter/email/body.txt``
+    ``inviter2/email/subject.txt`` and ``inviter2/email/body.txt``
 
     Both templates will receive all the ``kwargs``.
 
@@ -36,8 +38,8 @@ def send_invite(invitee, inviter, url=None, opt_out_url=None, **kwargs):
     ctx = template.Context(ctx)
 
     subject_template = kwargs.pop('subject_template',
-                                  'inviter/email/subject.txt')
-    body_template = kwargs.pop('body_template', 'inviter/email/body.txt')
+                                  'inviter2/email/subject.txt')
+    body_template = kwargs.pop('body_template', 'inviter2/email/body.txt')
 
     subject = template.loader.get_template(subject_template)
     body = template.loader.get_template(body_template)
@@ -81,7 +83,7 @@ def invite(email, inviter, sendfn=send_invite, resend=True, **kwargs):
     * Return ``(None, False)``
 
     To customize sending, pass in a new ``sendfn`` function as documented by
-    :attr:`inviter.utils.send_invite`:
+    :attr:`inviter2.utils.send_invite`:
 
     ::
 
@@ -92,7 +94,7 @@ def invite(email, inviter, sendfn=send_invite, resend=True, **kwargs):
     :param email: The email address
     :param inviter: The user inviting the email address
     :param sendfn: An email sending function. Defaults to
-                   :attr:`inviter.utils.send_invite`
+                   :attr:`inviter2.utils.send_invite`
     :param resend: Resend email to users that are not registered yet
     """
 
@@ -114,9 +116,9 @@ def invite(email, inviter, sendfn=send_invite, resend=True, **kwargs):
         user.save()
 
     url_parts = int_to_base36(user.id), token_generator.make_token(user)
-    url = reverse('inviter:register', args=url_parts)
+    url = reverse('inviter2:register', args=url_parts)
 
-    opt_out_url = reverse('inviter:opt-out', args=url_parts)
+    opt_out_url = reverse('inviter2:opt-out', args=url_parts)
     kwargs.update(opt_out_url=opt_out_url)
 
     sendfn(user, inviter, url=url, **kwargs)

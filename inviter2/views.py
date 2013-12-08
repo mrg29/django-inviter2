@@ -1,4 +1,3 @@
-# Create your views here.
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -6,13 +5,14 @@ from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.utils import importlib
 from django.utils.http import base36_to_int
 from django.views.generic.base import TemplateView
-from inviter.forms import OptOutForm
+
+from .forms import OptOutForm
 
 
-FORM = getattr(settings, 'INVITER_FORM', 'inviter.forms.RegistrationForm')
-REDIRECT = getattr(settings, 'INVITER_REDIRECT', 'inviter:done')
+FORM = getattr(settings, 'INVITER_FORM', 'inviter2.forms.RegistrationForm')
+REDIRECT = getattr(settings, 'INVITER_REDIRECT', 'inviter2:done')
 TOKEN_GENERATOR = getattr(settings, 'INVITER_TOKEN_GENERATOR',
-                          'inviter.tokens.generator')
+                          'inviter2.tokens.generator')
 
 
 def import_attribute(path):
@@ -64,7 +64,7 @@ class Register(UserMixin, TemplateView):
     the email address. Anywho - one can customize the form that is used.
 
     """
-    template_name = 'inviter/register.html'
+    template_name = 'inviter2/register.html'
     form = import_attribute(FORM)
     redirect_url = REDIRECT
 
@@ -96,7 +96,7 @@ class Register(UserMixin, TemplateView):
 
 
 class Done(TemplateView):
-    template_name = 'inviter/done.html'
+    template_name = 'inviter2/done.html'
 
     def get(self, request):
         return self.render_to_response({})
@@ -105,8 +105,8 @@ class Done(TemplateView):
 class OptOut(UserMixin, TemplateView):
     """ We want to give the user also the option to *not* receive any
     invitations anymore, which is happening in this view and
-    :class:`inviter.forms.OptOutForm`. """
-    template_name = 'inviter/opt-out.html'
+    :class:`inviter2.forms.OptOutForm`. """
+    template_name = 'inviter2/opt-out.html'
 
     def get(self, request, user):
         form = OptOutForm(instance=user)
@@ -117,12 +117,12 @@ class OptOut(UserMixin, TemplateView):
 
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('inviter:opt-out-done'))
+            return HttpResponseRedirect(reverse('inviter2:opt-out-done'))
         return self.render_to_response({'form': form})
 
 
 class OptOutDone(TemplateView):
-    template_name = 'inviter/opt-out-done.html'
+    template_name = 'inviter2/opt-out-done.html'
 
     def get(self, request):
         return self.render_to_response({})

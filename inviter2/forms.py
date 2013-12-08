@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
-from inviter.models import OptOut
+from inviter2.models import OptOut
 
 
 class RegistrationForm(forms.ModelForm):
