@@ -4,12 +4,12 @@ from setuptools import setup, find_packages
 import inviter
 
 setup(
-    name='django-inviter',
+    name='django-inviter2',
     version=inviter.__version__,
     description='Invite users to your Django apps',
-    long_description=open('README.rst').read(),
-    author='Alen Mujezinovic',
-    author_email='alen@caffeinehit.com',
+    long_description=open('README.md').read(),
+    author='Michael J Schultz',
+    author_email='mjschultz@gmail.com',
     packages=find_packages(),
     classifiers=[
         'Environment :: Web Environment',
