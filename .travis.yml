@@ -17,7 +17,6 @@ matrix:  # see https://docs.djangoproject.com/en/dev/faq/install/
 # command to install dependencies
 install: 
   - pip install Django==$DJANGO_VERSION --use-mirrors
-  - pip install -r requirements.txt --use-mirrors
   - pip install coveralls --use-mirrors
   - python setup.py develop
 script: coverage run example/manage.py test -v2
