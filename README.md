@@ -1,5 +1,5 @@
-django-inviter
-==============
+django-inviter2
+===============
 
 [![Build Status](https://travis-ci.org/mjschultz/django-inviter2.png)](https://travis-ci.org/mjschultz/django-inviter2)
 
