@@ -2,6 +2,7 @@ django-inviter2
 ===============
 
 [![Build Status](https://travis-ci.org/mjschultz/django-inviter2.png)](https://travis-ci.org/mjschultz/django-inviter2)
+[![Coverage Status](https://coveralls.io/repos/mjschultz/django-inviter2/badge.png?branch=master)](https://coveralls.io/r/mjschultz/django-inviter2?branch=master)
 
 Let your users invite new users.
 
