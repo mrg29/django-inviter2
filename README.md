@@ -20,6 +20,5 @@ History
 This is a fork of [django-inviter](http://www.caffeinehit.com/work/code/django-inviter).
 
 
-See `code <https://github.com/caffeinehit/django-inviter>`_ and 
-`documentation <http://django-inviter.readthedocs.org>`_.
+Documentation is available via [Read the Docs](http://django-inviter2.readthedocs.org/).
 
