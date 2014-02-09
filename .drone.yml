@@ -3,8 +3,12 @@ image: python2.7
 services:
   - mysql
   - postgres
-install: 
+script:
   - pip install Django==$DJANGO_VERSION --use-mirrors
   - pip install coveralls --use-mirrors
   - python setup.py develop
-script: coverage run example/manage.py test -v2
+  - coverage run example/manage.py test -v2
+notify:
+  email:
+    recipients:
+      - mjschultz@gmail.com
