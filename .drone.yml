@@ -1,0 +1,10 @@
+image: python2.7
+# command to install dependencies
+services:
+  - mysql
+  - postgresql
+install: 
+  - pip install Django==$DJANGO_VERSION --use-mirrors
+  - pip install coveralls --use-mirrors
+  - python setup.py develop
+script: coverage run example/manage.py test -v2
