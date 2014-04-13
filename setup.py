@@ -7,7 +7,7 @@ setup(
     name='django-inviter2',
     version=inviter2.__version__,
     description='Simple email invitations for your Django app',
-    long_description=open('README.md').read(),
+    long_description=open('README.rst').read(),
     author='Michael J Schultz',
     author_email='mjschultz@gmail.com',
     url='https://github.com/mjschultz/django-inviter2',
