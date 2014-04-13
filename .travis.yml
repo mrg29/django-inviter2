@@ -4,6 +4,7 @@ python:
   - "2.7"
   - "3.2"
   - "3.3"
+  - "3.4"
 env:
   - DJANGO_VERSION="1.4"
   - DJANGO_VERSION="1.5"
@@ -13,6 +14,8 @@ matrix:  # see https://docs.djangoproject.com/en/dev/faq/install/
     - python: "3.2"
       env: DJANGO_VERSION="1.4"
     - python: "3.3"
+      env: DJANGO_VERSION="1.4"
+    - python: "3.4"
       env: DJANGO_VERSION="1.4"
 # command to install dependencies
 install: 
