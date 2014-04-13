@@ -10,6 +10,7 @@ setup(
     long_description=open('README.md').read(),
     author='Michael J Schultz',
     author_email='mjschultz@gmail.com',
+    url='https://github.com/mjschultz/django-inviter2',
     packages=find_packages(),
     classifiers=[
         'Environment :: Web Environment',
