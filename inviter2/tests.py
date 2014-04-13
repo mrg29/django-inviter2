@@ -126,7 +126,7 @@ class InviteTest(TestCase):
         mixin = UserMixin()
         with self.assertRaises(Http404) as e:
             mixin.get_user('z'*14)
-            self.assertEqual(e, 'No such invited user.')
+        self.assertEqual(str(e.exception), 'No such invited user.')
 
     def test_opt_out(self):
         self.assertEqual(2, User.objects.count())
