@@ -65,8 +65,8 @@ class InviteTest(TestCase):
 
         resp = self.client.post(url, {'username': 'testuser',
                                       'email': 'foo@example.com',
-                                      'new_password1': 'test-1234',
-                                      'new_password2': 'test-1234'})
+                                      'password1': 'test-1234',
+                                      'password2': 'test-1234'})
 
         self.assertEqual(302, resp.status_code, resp.content)
 
@@ -103,8 +103,8 @@ class InviteTest(TestCase):
         self.assertEqual(200, resp.status_code, resp.status_code)
         resp = self.client.post(url, {'username': 'testuser',
                                       'email': 'foo@example.com',
-                                      'new_password1': 'test-1234',
-                                      'new_password2': 'test-4321'})
+                                      'password1': 'test-1234',
+                                      'password2': 'test-4321'})
         self.assertEqual(200, resp.status_code, resp.content)
         self.assertIn('two password fields didn&#39;t match.', resp.content)
 
@@ -112,8 +112,8 @@ class InviteTest(TestCase):
         with self.settings(INVITER_REDIRECT='http://example.com/'):
             resp = self.client.post(url, {'username': 'testuser',
                                           'email': 'foo@example.com',
-                                          'new_password1': 'test-1234',
-                                          'new_password2': 'test-1234'})
+                                          'password1': 'test-1234',
+                                          'password2': 'test-1234'})
             self.assertEqual(302, resp.status_code, resp.content)
             self.assertEqual(resp['Location'], 'http://example.com/')
 
