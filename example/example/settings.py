@@ -54,6 +54,11 @@ ROOT_URLCONF = 'example.urls'
 WSGI_APPLICATION = 'example.wsgi.application'
 
 
+# A simple 404 renderer for Django 1.4
+def render404():
+    return 'Not Found'
+handler404 = 'example.settings.render404'
+
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
