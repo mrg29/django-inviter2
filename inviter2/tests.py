@@ -13,11 +13,13 @@ from six.moves.urllib.parse import urlparse
 from django.contrib.auth.models import User
 from django.core import mail
 from django.core.urlresolvers import reverse
+from django.http import Http404
 from django.test import TestCase
 from django.utils.http import int_to_base36
 
 from .models import OptOut
 from .utils import invite, token_generator
+from .views import UserMixin
 
 
 class InviteTest(TestCase):
@@ -118,6 +120,12 @@ class InviteTest(TestCase):
                                           'password2': 'test-1234'})
             self.assertEqual(302, resp.status_code, resp.content)
             self.assertEqual(resp['Location'], 'http://example.com/')
+
+    def test_get_user(self):
+        mixin = UserMixin()
+        with self.assertRaises(Http404) as e:
+            mixin.get_user('z'*14)
+            self.assertEqual(e, 'No such invited user.')
 
     def test_opt_out(self):
         self.assertEqual(2, User.objects.count())

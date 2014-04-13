@@ -37,7 +37,7 @@ class UserMixin(object):
         try:
             uid_int = base36_to_int(uidb36)
             user = User.objects.get(id=uid_int)
-        except (ValueError, User.DoesNotExist):
+        except (ValueError, OverflowError, User.DoesNotExist):
             raise Http404("No such invited user.")
         return user
 
