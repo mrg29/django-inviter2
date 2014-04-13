@@ -1,4 +1,6 @@
-import shortuuid
+from __future__ import unicode_literals
+
+from shortuuid import uuid
 
 from django import template
 from django.conf import settings
@@ -108,7 +110,7 @@ def invite(email, inviter, sendfn=send_invite, resend=True, **kwargs):
             return user, False
     except User.DoesNotExist:
         user = User.objects.create(
-            username=shortuuid.uuid(),
+            username=uuid(),
             email=email,
             is_active=False
         )

@@ -4,7 +4,9 @@ when you run "manage.py test".
 
 Replace this with more appropriate tests for your application.
 """
-import shortuuid
+from __future__ import unicode_literals
+
+from shortuuid import uuid
 
 from six.moves.urllib.parse import urlparse
 
@@ -20,8 +22,8 @@ from .utils import invite, token_generator
 
 class InviteTest(TestCase):
     def setUp(self):
-        self.inviter = User.objects.create(username=shortuuid.uuid())
-        self.existing = User.objects.create(username=shortuuid.uuid(),
+        self.inviter = User.objects.create(username=uuid())
+        self.existing = User.objects.create(username=uuid(),
                                             email='existing@example.com')
 
     def test_inviting(self):
@@ -146,7 +148,7 @@ class InviteTest(TestCase):
 
         opt_out = OptOut.objects.get()
         opt_hash = OptOut.objects._hash_email('foo@example.com')
-        self.assertEqual(unicode(opt_out), opt_hash)
+        self.assertEqual(opt_out.__unicode__(), opt_hash)
 
     def test_opt_out_done(self):
         resp = self.client.get(reverse('inviter2:opt-out-done'))
