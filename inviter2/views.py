@@ -10,7 +10,6 @@ from .forms import OptOutForm
 
 
 FORM = getattr(settings, 'INVITER_FORM', 'inviter2.forms.RegistrationForm')
-REDIRECT = getattr(settings, 'INVITER_REDIRECT', 'inviter2:done')
 TOKEN_GENERATOR = getattr(settings, 'INVITER_TOKEN_GENERATOR',
                           'inviter2.tokens.generator')
 
@@ -66,7 +65,10 @@ class Register(UserMixin, TemplateView):
     """
     template_name = 'inviter2/register.html'
     form = import_attribute(FORM)
-    redirect_url = REDIRECT
+
+    @property
+    def redirect_url(self):
+        return getattr(settings, 'INVITER_REDIRECT', 'inviter2:done')
 
     def get(self, request, user):
         """
