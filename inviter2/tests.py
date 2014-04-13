@@ -110,7 +110,8 @@ class InviteTest(TestCase):
                                       'password1': 'test-1234',
                                       'password2': 'test-4321'})
         self.assertEqual(200, resp.status_code, resp.content)
-        self.assertIn('two password fields didn&#39;t match.', resp.content)
+        self.assertIn(
+            'The two password fields didn&#39;t match.', str(resp.content))
 
         # developer with bad redirect URL
         with self.settings(INVITER_REDIRECT='http://example.com/'):
