@@ -4,22 +4,23 @@ python:
   - "2.7"
   - "3.2"
   - "3.3"
-  # - "3.4"  waiting on https://github.com/travis-ci/travis-ci/issues/1989
+  - "3.4"
 env:
-  - DJANGO_VERSION="1.4"
-  - DJANGO_VERSION="1.5"
-  - DJANGO_VERSION="1.6"
+  - DJANGO="Django==1.4"
+  - DJANGO="Django==1.5"
+  - DJANGO="Django==1.6"
+  - DJANGO="Django==https://www.djangoproject.com/download/1.7b3/tarball/"
 matrix:  # see https://docs.djangoproject.com/en/dev/faq/install/
   exclude:
     - python: "3.2"
-      env: DJANGO_VERSION="1.4"
+      env: DJANGO="Django==1.4"
     - python: "3.3"
-      env: DJANGO_VERSION="1.4"
+      env: DJANGO="Django==1.4"
     - python: "3.4"
-      env: DJANGO_VERSION="1.4"
+      env: DJANGO="Django==1.4"
 # command to install dependencies
 install: 
-  - pip install Django==$DJANGO_VERSION --use-mirrors
+  - pip install $DJANGO --use-mirrors
   - pip install coveralls --use-mirrors
   - python setup.py develop
 script: coverage run example/manage.py test -v2
