@@ -12,6 +12,8 @@ env:
   - DJANGO="https://www.djangoproject.com/download/1.7b3/tarball/"
 matrix:  # see https://docs.djangoproject.com/en/dev/faq/install/
   exclude:
+    - python: "2.6"
+      env: DJANGO="https://www.djangoproject.com/download/1.7b3/tarball/"
     - python: "3.2"
       env: DJANGO="Django==1.4"
     - python: "3.3"
