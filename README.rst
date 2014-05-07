@@ -23,7 +23,8 @@ Version Support
 ===============
 
 - Django 1.4, 1.5, and 1.6 (requires Python 2.6 or 2.7)
-- Django 1.5 and 1.6 (requires Python 2.6, 2.7, 3.2, or 3.3)
+- Django 1.5 and 1.6 (requires Python 2.6, 2.7, 3.2, 3.3, or 3.4)
+- Django 1.7b3 (requires Python 2.7, 3.2, 3.3, or 3.4)
 
 History
 =======
