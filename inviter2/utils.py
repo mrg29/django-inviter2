@@ -37,6 +37,7 @@ def send_invite(invitee, inviter, url=None, opt_out_url=None, **kwargs):
     ctx = {'invitee': invitee, 'inviter': inviter}
     ctx.update(kwargs)
     ctx.update(url=url)
+    ctx.update(opt_out_url=opt_out_url)
     ctx = template.Context(ctx)
 
     subject_template = kwargs.pop('subject_template',
