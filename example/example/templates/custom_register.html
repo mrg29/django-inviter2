@@ -1,0 +1,9 @@
+<h3>Custom Form</h3>
+<form method="post" action=".">
+    {{ form.non_field_errors }}
+    <table>
+    {{ form.as_table }}
+    </table>
+    {% csrf_token %}
+    <input type="submit" value="Register" />
+</form>
