@@ -24,6 +24,11 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+)
+
 ALLOWED_HOSTS = []
 
 
@@ -38,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'inviter2',
+    'example',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,3 +87,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Optional custom templates.  Default templates are used if these variables
+# don't exist.
+INVITER_FORM_TEMPLATE = 'custom_register.html'
+INVITER_DONE_TEMPLATE = 'custom_done.html'
+INVITER_OPTOUT_DONE_TEMPLATE = 'custom_optout_done.html'
+INVITER_OPTOUT_TEMPLATE = 'custom_optout.html'
