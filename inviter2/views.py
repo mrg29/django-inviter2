@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.utils import importlib
@@ -12,6 +12,7 @@ from .forms import OptOutForm
 
 
 FORM = getattr(settings, 'INVITER_FORM', 'inviter2.forms.RegistrationForm')
+INVITER_FORM_USER_KWARG = getattr(settings, 'INVITER_FORM_USER_KWARG', 'instance')
 INVITER_FORM_TEMPLATE = getattr(
     settings, 'INVITER_FORM_TEMPLATE', 'inviter2/register.html')
 INVITER_DONE_TEMPLATE = getattr(
@@ -22,6 +23,8 @@ INVITER_OPTOUT_DONE_TEMPLATE = getattr(
     settings, 'INVITER_OPTOUT_DONE_TEMPLATE', 'inviter2/opt-out-done.html')
 TOKEN_GENERATOR = getattr(
     settings, 'INVITER_TOKEN_GENERATOR', 'inviter2.tokens.generator')
+
+User = get_user_model()
 
 
 def import_attribute(path):
@@ -87,7 +90,7 @@ class Register(UserMixin, TemplateView):
         """
         context = {
             'invitee': user,
-            'form': self.form(instance=user)
+            'form': self.form(**{INVITER_FORM_USER_KWARG: user})
         }
         return self.render_to_response(context)
 
@@ -96,7 +99,10 @@ class Register(UserMixin, TemplateView):
         Unfortunately just a copy of
         :attr:`django.contrib.auth.views.password_reset_confirm`
         """
-        form = self.form(request.POST, instance=user)
+        form = self.form(**{
+            INVITER_FORM_USER_KWARG: user,
+            'data': request.POST
+        })
 
         if form.is_valid():
             form.save()
