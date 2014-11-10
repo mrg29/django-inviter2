@@ -4,7 +4,12 @@ from shortuuid import uuid
 
 from django import template
 from django.conf import settings
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+except ImportError:
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.utils.http import int_to_base36
@@ -18,6 +23,17 @@ FROM_EMAIL = getattr(settings, 'INVITER_FROM_EMAIL',
 
 token_generator = import_attribute(TOKEN_GENERATOR)
 
+
+def create_inactive_user(**initials):
+    """
+    Create user with ``is_active`` se to ``False`` and a random password
+    """
+    initials.update(is_active=False)
+    user = User.objects.create(**initials)
+    user.set_unusable_password()
+    user.save()
+    return user
+    
 
 def send_invite(invitee, inviter, url=None, opt_out_url=None, **kwargs):
     """
@@ -63,7 +79,7 @@ def invite(email, inviter, sendfn=send_invite, resend=True, **kwargs):
 
     If a user with ``email`` address does not exist:
 
-    * Creates a :class:`django.contrib.auth.models.User` object
+    * Creates a user object
     * Set ``user.email = email``
     * Set ``user.is_active = False``
     * Set a random password
@@ -100,7 +116,7 @@ def invite(email, inviter, sendfn=send_invite, resend=True, **kwargs):
                    :attr:`inviter2.utils.send_invite`
     :param resend: Resend email to users that are not registered yet
     """
-
+    
     if OptOut.objects.is_blocked(email):
         return None, False
     try:
@@ -110,13 +126,11 @@ def invite(email, inviter, sendfn=send_invite, resend=True, **kwargs):
         if not resend:
             return user, False
     except User.DoesNotExist:
-        user = User.objects.create(
-            username=uuid(),
-            email=email,
-            is_active=False
-        )
-        user.set_unusable_password()
-        user.save()
+        username_field = getattr(User, 'USERNAME_FIELD', 'username')
+        if username_field == 'username':
+            user = create_inactive_user(email=email, username=uuid())
+        else:
+            user = create_inactive_user(email=email)
 
     url_parts = int_to_base36(user.id), token_generator.make_token(user)
     url = reverse('inviter2:register', args=url_parts)

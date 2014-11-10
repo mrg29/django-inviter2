@@ -98,6 +98,13 @@ There are a couple of editable settings
     :type: str
 
     The form to be used when an invited user signs up.
+    
+.. attribute:: INVITER_FORM_USER_KWARG
+
+    :Default: ``instance``
+    :type: str
+    
+    The name of the kwarg field to pass to the ``INVITER_FORM`` with the user object.
 
 .. attribute:: INVITER_REDIRECT
 
