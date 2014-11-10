@@ -4,7 +4,12 @@ from shortuuid import uuid
 
 from django import template
 from django.conf import settings
-from django.contrib.auth import get_user_model
+try:
+    from django.contrib.auth import get_user_model
+except ImportError:
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.utils.http import int_to_base36
@@ -17,8 +22,6 @@ FROM_EMAIL = getattr(settings, 'INVITER_FROM_EMAIL',
                      settings.DEFAULT_FROM_EMAIL)
 
 token_generator = import_attribute(TOKEN_GENERATOR)
-
-User = get_user_model()
 
 
 def create_inactive_user(**initials):

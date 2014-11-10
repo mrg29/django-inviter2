@@ -10,7 +10,12 @@ from shortuuid import uuid
 
 from six.moves.urllib.parse import urlparse
 
-from django.contrib.auth import get_user_model
+try:
+    from django.contrib.auth import get_user_model
+except ImportError:
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -20,8 +25,6 @@ from django.utils.http import int_to_base36
 from .models import OptOut
 from .utils import invite, token_generator
 from .views import UserMixin
-
-User = get_user_model()
 
 
 class InviteTest(TestCase):
