@@ -9,11 +9,11 @@ env:
   - DJANGO="Django==1.4"
   - DJANGO="Django==1.5"
   - DJANGO="Django==1.6"
-  - DJANGO="https://www.djangoproject.com/download/1.7b3/tarball/"
+  - DJANGO="Django==1.7"
 matrix:  # see https://docs.djangoproject.com/en/dev/faq/install/
   exclude:
     - python: "2.6"
-      env: DJANGO="https://www.djangoproject.com/download/1.7b3/tarball/"
+      env: DJANGO="Django==1.7"
     - python: "3.2"
       env: DJANGO="Django==1.4"
     - python: "3.3"

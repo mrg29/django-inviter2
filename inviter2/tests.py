@@ -10,7 +10,12 @@ from shortuuid import uuid
 
 from six.moves.urllib.parse import urlparse
 
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+except ImportError:
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -24,9 +29,16 @@ from .views import UserMixin
 
 class InviteTest(TestCase):
     def setUp(self):
-        self.inviter = User.objects.create(username=uuid())
-        self.existing = User.objects.create(username=uuid(),
-                                            email='existing@example.com')
+        self.required_fields = getattr(User, 'REQUIRED_FIELDS', [])
+        self.required_fields.append(
+            getattr(User, 'USERNAME_FIELD', 'username'))
+        if 'username' in self.required_fields:
+            self.inviter = User.objects.create(username=uuid())
+            self.existing = User.objects.create(
+                email='existing@example.com', username=uuid())
+        else:
+            self.inviter = User.objects.create()
+            self.existing = User.objects.create(email='existing@example.com')
 
     def test_inviting(self):
         user, sent = invite("foo@example.com", self.inviter)
@@ -77,15 +89,20 @@ class InviteTest(TestCase):
         resp = self.client.get(url)
 
         self.assertEqual(200, resp.status_code, resp.status_code)
-
-        resp = self.client.post(url, {'username': 'testuser',
-                                      'email': 'foo@example.com',
-                                      'password1': 'test-1234',
-                                      'password2': 'test-1234'})
+        
+        fields = {
+            'email': 'foo@example.com',
+            'password1': 'test-1234',
+            'password2': 'test-1234'
+        }
+        if 'username' in self.required_fields:
+            fields.update(username='testuser')
+        
+        resp = self.client.post(url, fields)
 
         self.assertEqual(302, resp.status_code, resp.content)
 
-        self.client.login(username='testuser', password='test-1234')
+        # self.client.login(username='testuser', password='test-1234')
 
         resp = self.client.get(reverse('inviter2:done'))
 
@@ -116,20 +133,24 @@ class InviteTest(TestCase):
         url = reverse('inviter2:register', args=url_parts)
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code, resp.status_code)
-        resp = self.client.post(url, {'username': 'testuser',
-                                      'email': 'foo@example.com',
-                                      'password1': 'test-1234',
-                                      'password2': 'test-4321'})
+        
+        fields = {
+            'email': 'foo@example.com',
+            'password1': 'test-1234',
+            'password2': 'test-4321'
+        }
+        if 'username' in self.required_fields:
+            fields.update(username='testuser')
+        
+        resp = self.client.post(url, fields)
         self.assertEqual(200, resp.status_code, resp.content)
         self.assertIn(
             'The two password fields didn&#39;t match.', str(resp.content))
 
         # developer with bad redirect URL
         with self.settings(INVITER_REDIRECT='http://example.com/'):
-            resp = self.client.post(url, {'username': 'testuser',
-                                          'email': 'foo@example.com',
-                                          'password1': 'test-1234',
-                                          'password2': 'test-1234'})
+            fields.update(password2='test-1234')
+            resp = self.client.post(url, fields)
             self.assertEqual(302, resp.status_code, resp.content)
             self.assertEqual(resp['Location'], 'http://example.com/')
 
