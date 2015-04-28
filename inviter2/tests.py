@@ -56,6 +56,17 @@ class InviteTest(TestCase):
         self.assertEqual(2, len(mail.outbox))
         self.assertEqual(3, User.objects.count())
 
+    def test_reinvite_user(self):
+        self.existing.is_active = False
+        self.existing.save()
+
+        user, sent = invite("existing@example.com", self.inviter,
+                            user=self.existing)
+        self.assertTrue(sent)
+        self.assertFalse(user.is_active)
+        self.assertEqual(1, len(mail.outbox))
+        self.assertEqual(2, User.objects.count())
+
     def test_views(self):
         user, sent = invite("foo@example.com", self.inviter)
         self.assertTrue(sent)
@@ -84,7 +95,7 @@ class InviteTest(TestCase):
         # invalid base36 encoded user id
         user, sent = invite("foo@example.com", self.inviter)
         self.assertTrue(sent)
-        url_parts = 'z'*13, token_generator.make_token(user)
+        url_parts = 'z' * 13, token_generator.make_token(user)
         url = reverse('inviter2:register', args=url_parts)
         resp = self.client.get(url)
         self.assertEqual(404, resp.status_code, resp.status_code)
@@ -125,7 +136,7 @@ class InviteTest(TestCase):
     def test_get_user(self):
         mixin = UserMixin()
         with self.assertRaises(Http404) as e:
-            mixin.get_user('z'*14)
+            mixin.get_user('z' * 14)
         self.assertEqual(str(e.exception), 'No such invited user.')
 
     def test_opt_out(self):
