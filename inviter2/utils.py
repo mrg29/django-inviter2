@@ -72,10 +72,15 @@ def send_invite(invitee, inviter, url=None, opt_out_url=None, **kwargs):
     send_mail(subject, body, FROM_EMAIL, [invitee.email])
 
 
-def invite(email, inviter, sendfn=send_invite, resend=True, **kwargs):
+def invite(email, inviter, user=None, sendfn=send_invite, resend=True,
+           **kwargs):
     """
     Invite a given email address and return a ``(User, sent)`` tuple similar
     to the Django :meth:`django.db.models.Manager.get_or_create` method.
+
+    If a user is passed in, reinvite the user.  For projects that support
+    multiple users with the same email address, it is necessary to pass in the
+    user to avoid throwing a MultipleObjectsReturned error.
 
     If a user with ``email`` address does not exist:
 
@@ -112,6 +117,7 @@ def invite(email, inviter, sendfn=send_invite, resend=True, **kwargs):
 
     :param email: The email address
     :param inviter: The user inviting the email address
+    :param pk: The pk of an existing user to be reinvited.
     :param sendfn: An email sending function. Defaults to
                    :attr:`inviter2.utils.send_invite`
     :param resend: Resend email to users that are not registered yet
@@ -120,7 +126,8 @@ def invite(email, inviter, sendfn=send_invite, resend=True, **kwargs):
     if OptOut.objects.is_blocked(email):
         return None, False
     try:
-        user = User.objects.get(email=email)
+        if not user:
+            user = User.objects.get(email=email)
         if user.is_active:
             return user, False
         if not resend:
