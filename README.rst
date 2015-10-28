@@ -23,9 +23,10 @@ Version Support
 ===============
 
 We try to maintain support at or near Django's `supported versions`_.
+Though we've dropped support for Python 3.2 (file an issue if you need it!).
 
-- Django 1.7 (requires Python 2.7, 3.2, 3.3, or 3.4)
-- Django 1.8 (requires Python 2.7, 3.2, 3.3, 3.4, or 3.5)
+- Django 1.7 (requires Python 2.7, 3.3, or 3.4)
+- Django 1.8 (requires Python 2.7, 3.3, 3.4, or 3.5)
 - Django 1.9 (requires Python 2.7, 3.4, or 3.5)
 
 .. _supported versions: https://www.djangoproject.com/download/
