@@ -22,10 +22,13 @@ Installation
 Version Support
 ===============
 
-- Django 1.4 (requires Python 2.6 or 2.7)
-- Django 1.5 and 1.6 (requires Python 2.6, 2.7, 3.2, 3.3, or 3.4)
+We try to maintain support at or near Django's `supported versions`_.
+
 - Django 1.7 (requires Python 2.7, 3.2, 3.3, or 3.4)
-- Django 1.8 (requires Python 2.7, 3.2, 3.3, or 3.4)
+- Django 1.8 (requires Python 2.7, 3.2, 3.3, 3.4, or 3.5)
+- Django 1.9 (requires Python 2.7, 3.4, or 3.5)
+
+.. _supported versions: https://www.djangoproject.com/download/
 
 History
 =======
