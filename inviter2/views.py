@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import importlib
+
 from django.conf import settings
 try:
     from django.contrib.auth import get_user_model
@@ -9,7 +11,6 @@ else:
     User = get_user_model()
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
-from django.utils import importlib
 from django.utils.http import base36_to_int
 from django.views.generic.base import TemplateView
 
@@ -17,7 +18,9 @@ from .forms import OptOutForm
 
 
 FORM = getattr(settings, 'INVITER_FORM', 'inviter2.forms.RegistrationForm')
-INVITER_FORM_USER_KWARG = getattr(settings, 'INVITER_FORM_USER_KWARG', 'instance')
+INVITER_FORM_USER_KWARG = getattr(
+    settings, 'INVITER_FORM_USER_KWARG', 'instance'
+)
 INVITER_FORM_TEMPLATE = getattr(
     settings, 'INVITER_FORM_TEMPLATE', 'inviter2/register.html')
 INVITER_DONE_TEMPLATE = getattr(
