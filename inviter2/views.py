@@ -3,12 +3,7 @@ from __future__ import unicode_literals
 import importlib
 
 from django.conf import settings
-try:
-    from django.contrib.auth import get_user_model
-except ImportError:
-    from django.contrib.auth.models import User
-else:
-    User = get_user_model()
+from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.utils.http import base36_to_int
@@ -17,6 +12,7 @@ from django.views.generic.base import TemplateView
 from .forms import OptOutForm
 
 
+User = get_user_model()
 FORM = getattr(settings, 'INVITER_FORM', 'inviter2.forms.RegistrationForm')
 INVITER_FORM_USER_KWARG = getattr(
     settings, 'INVITER_FORM_USER_KWARG', 'instance'
@@ -34,9 +30,7 @@ TOKEN_GENERATOR = getattr(
 
 
 def import_attribute(path):
-    """
-    Import an attribute from a module.
-    """
+    """Import an attribute from a module."""
     module = '.'.join(path.split('.')[:-1])
     function = path.split('.')[-1]
 
@@ -45,8 +39,7 @@ def import_attribute(path):
 
 
 class UserMixin(object):
-    """ Handles retrieval of users from the token and does a bit of access
-    management. """
+    """Handle retrieval of users from the token."""
 
     token_generator = import_attribute(TOKEN_GENERATOR)
 
@@ -60,8 +53,9 @@ class UserMixin(object):
 
     def dispatch(self, request, uidb36, token, *args, **kwargs):
         """
-        Overriding the default dispatch method on Django's views to do
-        some token validation and if necessary deny access to the resource.
+        Override the dispatch method to do token validation.
+
+        If necessary this will deny access to the resource.
 
         Also passes the user as first argument after the request argument
         to the handler method.
@@ -77,11 +71,13 @@ class UserMixin(object):
 
 class Register(UserMixin, TemplateView):
     """
-    A registration view for invited users. The user model already exists - this
-    view just takes care of setting a password and username, and maybe update
-    the email address. Anywho - one can customize the form that is used.
+    A registration view for invited users.
 
+    The user model already exists - this view just takes care of setting a
+    password and username, and maybe update the email address. Anywho - one
+    can customize the form that is used.
     """
+
     template_name = INVITER_FORM_TEMPLATE
     form = import_attribute(FORM)
 
@@ -90,10 +86,6 @@ class Register(UserMixin, TemplateView):
         return getattr(settings, 'INVITER_REDIRECT', 'inviter2:done')
 
     def get(self, request, user):
-        """
-        Unfortunately just a copy of
-        :attr:`django.contrib.auth.views.password_reset_confirm`
-        """
         context = {
             'invitee': user,
             'form': self.form(**{INVITER_FORM_USER_KWARG: user})
@@ -101,10 +93,6 @@ class Register(UserMixin, TemplateView):
         return self.render_to_response(context)
 
     def post(self, request, user):
-        """
-        Unfortunately just a copy of
-        :attr:`django.contrib.auth.views.password_reset_confirm`
-        """
         form = self.form(**{
             INVITER_FORM_USER_KWARG: user,
             'data': request.POST
@@ -127,9 +115,12 @@ class Done(TemplateView):
 
 
 class OptOut(UserMixin, TemplateView):
-    """ We want to give the user also the option to *not* receive any
-    invitations anymore, which is happening in this view and
-    :class:`inviter2.forms.OptOutForm`. """
+    """
+    Give the user also the option to *not* receive any invitations anymore.
+
+    Which is happening in this view and :class:`inviter2.forms.OptOutForm`.
+    """
+
     template_name = INVITER_OPTOUT_TEMPLATE
 
     def get(self, request, user):
