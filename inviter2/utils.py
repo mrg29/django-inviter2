@@ -4,12 +4,7 @@ from shortuuid import uuid
 
 from django import template
 from django.conf import settings
-try:
-    from django.contrib.auth import get_user_model
-except ImportError:
-    from django.contrib.auth.models import User
-else:
-    User = get_user_model()
+from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.utils.http import int_to_base36
@@ -18,6 +13,7 @@ from .models import OptOut
 from .views import import_attribute, TOKEN_GENERATOR
 
 
+User = get_user_model()
 FROM_EMAIL = getattr(settings, 'INVITER_FROM_EMAIL',
                      settings.DEFAULT_FROM_EMAIL)
 
@@ -25,20 +21,20 @@ token_generator = import_attribute(TOKEN_GENERATOR)
 
 
 def create_inactive_user(**initials):
-    """
-    Create user with ``is_active`` se to ``False`` and a random password
-    """
+    """Create user with ``is_active`` se to ``False`` and a random password."""
     initials.update(is_active=False)
     user = User.objects.create(**initials)
     user.set_unusable_password()
     user.save()
     return user
-    
+
 
 def send_invite(invitee, inviter, url=None, opt_out_url=None, **kwargs):
     """
-    Send the default invitation email assembled from
-    ``inviter2/email/subject.txt`` and ``inviter2/email/body.txt``
+    Send the default invitation email.
+
+    Assembled from ``inviter2/email/subject.txt`` and
+    ``inviter2/email/body.txt``
 
     Both templates will receive all the ``kwargs``.
 
@@ -75,8 +71,10 @@ def send_invite(invitee, inviter, url=None, opt_out_url=None, **kwargs):
 def invite(email, inviter, user=None, sendfn=send_invite, resend=True,
            **kwargs):
     """
-    Invite a given email address and return a ``(User, sent)`` tuple similar
-    to the Django :meth:`django.db.models.Manager.get_or_create` method.
+    Invite a given email address.
+
+    Returns a ``(User, sent)`` tuple similar to the Django
+    :meth:`django.db.models.Manager.get_or_create` method.
 
     If a user is passed in, reinvite the user.  For projects that support
     multiple users with the same email address, it is necessary to pass in the
@@ -122,7 +120,6 @@ def invite(email, inviter, user=None, sendfn=send_invite, resend=True,
                    :attr:`inviter2.utils.send_invite`
     :param resend: Resend email to users that are not registered yet
     """
-    
     if OptOut.objects.is_blocked(email):
         return None, False
     try:
