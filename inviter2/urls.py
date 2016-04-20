@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from .views import Register, Done, OptOut, OptOutDone
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^done/$', Done.as_view(), name='done'),
     url(r'^register/(?P<uidb36>[0-9A-Za-z]{1,13})-(?P<token>[0-9A-Za-z]+)/$',
         Register.as_view(), name='register'),
@@ -13,7 +12,7 @@ urlpatterns = patterns(
         OptOut.as_view(), name='opt-out'),
     url(r'^optout/done/$',
         OptOutDone.as_view(), name='opt-out-done'),
-)
+]
 """
 .. attribute:: ^done/$
 
