@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from shortuuid import uuid
 
-from django import template
+from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
@@ -50,17 +50,13 @@ def send_invite(invitee, inviter, url=None, opt_out_url=None, **kwargs):
     ctx.update(kwargs)
     ctx.update(url=url)
     ctx.update(opt_out_url=opt_out_url)
-    ctx = template.Context(ctx)
 
     subject_template = kwargs.pop('subject_template',
                                   'inviter2/email/subject.txt')
     body_template = kwargs.pop('body_template', 'inviter2/email/body.txt')
 
-    subject = template.loader.get_template(subject_template)
-    body = template.loader.get_template(body_template)
-
-    subject = subject.render(ctx)
-    body = body.render(ctx)
+    subject = render_to_string(subject_template, ctx)
+    body = render_to_string(body_template, ctx)
 
     # Newlines in subject lines are not allowed
     subject = ' '.join(subject.split('\n'))
