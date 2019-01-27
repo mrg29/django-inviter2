@@ -1,0 +1,191 @@
+---
+{
+   "kind": "pipeline",
+   "name": "py2.7+Dj1.7",
+   "steps": [
+      {
+         "commands": [
+            "pip install $DJANGO coveralls",
+            "python setup.py develop",
+            "coverage run example/manage.py test -v2"
+         ],
+         "environment": {
+            "DJANGO": "Django>=1.7,<1.8"
+         },
+         "image": "python:2.7",
+         "name": "test"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "py2.7+Dj1.8",
+   "steps": [
+      {
+         "commands": [
+            "pip install $DJANGO coveralls",
+            "python setup.py develop",
+            "coverage run example/manage.py test -v2"
+         ],
+         "environment": {
+            "DJANGO": "Django>=1.8,<1.9"
+         },
+         "image": "python:2.7",
+         "name": "test"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "py2.7+Dj1.9",
+   "steps": [
+      {
+         "commands": [
+            "pip install $DJANGO coveralls",
+            "python setup.py develop",
+            "coverage run example/manage.py test -v2"
+         ],
+         "environment": {
+            "DJANGO": "Django>=1.9,<1.10"
+         },
+         "image": "python:2.7",
+         "name": "test"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "py3.3+Dj1.7",
+   "steps": [
+      {
+         "commands": [
+            "pip install $DJANGO coveralls",
+            "python setup.py develop",
+            "coverage run example/manage.py test -v2"
+         ],
+         "environment": {
+            "DJANGO": "Django>=1.7,<1.8"
+         },
+         "image": "python:3.3",
+         "name": "test"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "py3.3+Dj1.8",
+   "steps": [
+      {
+         "commands": [
+            "pip install $DJANGO coveralls",
+            "python setup.py develop",
+            "coverage run example/manage.py test -v2"
+         ],
+         "environment": {
+            "DJANGO": "Django>=1.8,<1.9"
+         },
+         "image": "python:3.3",
+         "name": "test"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "py3.4+Dj1.7",
+   "steps": [
+      {
+         "commands": [
+            "pip install $DJANGO coveralls",
+            "python setup.py develop",
+            "coverage run example/manage.py test -v2"
+         ],
+         "environment": {
+            "DJANGO": "Django>=1.7,<1.8"
+         },
+         "image": "python:3.4",
+         "name": "test"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "py3.4+Dj1.8",
+   "steps": [
+      {
+         "commands": [
+            "pip install $DJANGO coveralls",
+            "python setup.py develop",
+            "coverage run example/manage.py test -v2"
+         ],
+         "environment": {
+            "DJANGO": "Django>=1.8,<1.9"
+         },
+         "image": "python:3.4",
+         "name": "test"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "py3.4+Dj1.9",
+   "steps": [
+      {
+         "commands": [
+            "pip install $DJANGO coveralls",
+            "python setup.py develop",
+            "coverage run example/manage.py test -v2"
+         ],
+         "environment": {
+            "DJANGO": "Django>=1.9,<1.10"
+         },
+         "image": "python:3.4",
+         "name": "test"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "py3.5+Dj1.8",
+   "steps": [
+      {
+         "commands": [
+            "pip install $DJANGO coveralls",
+            "python setup.py develop",
+            "coverage run example/manage.py test -v2"
+         ],
+         "environment": {
+            "DJANGO": "Django>=1.8,<1.9"
+         },
+         "image": "python:3.5",
+         "name": "test"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "py3.5+Dj1.9",
+   "steps": [
+      {
+         "commands": [
+            "pip install $DJANGO coveralls",
+            "python setup.py develop",
+            "coverage run example/manage.py test -v2"
+         ],
+         "environment": {
+            "DJANGO": "Django>=1.9,<1.10"
+         },
+         "image": "python:3.5",
+         "name": "test"
+      }
+   ]
+}
+...
