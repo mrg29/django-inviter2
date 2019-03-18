@@ -4,8 +4,9 @@ import importlib
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
+from django.http import Http404, HttpResponseRedirect
 from django.utils.http import base36_to_int
 from django.views.generic.base import TemplateView
 
@@ -64,7 +65,7 @@ class UserMixin(object):
         user = self.get_user(uidb36)
 
         if not self.token_generator.check_token(user, token):
-            return HttpResponseForbidden()
+            raise PermissionDenied
 
         return super(UserMixin, self).dispatch(request, user, *args, **kwargs)
 
