@@ -5,8 +5,8 @@ import importlib
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
+from django.urls import reverse
 from django.utils.http import base36_to_int
 from django.views.generic.base import TemplateView
 
