@@ -133,9 +133,9 @@ def invite(email, inviter, user=None, sendfn=send_invite, resend=True,
             user = create_inactive_user(email=email)
 
     url_parts = int_to_base36(user.id), token_generator.make_token(user)
-    url = reverse('inviter2:register', args=url_parts)
+    url = reverse('register', args=url_parts, current_app='inviter2')
 
-    opt_out_url = reverse('inviter2:opt-out', args=url_parts)
+    opt_out_url = reverse('opt-out', args=url_parts, current_app='inviter2')
     kwargs.update(opt_out_url=opt_out_url)
 
     sendfn(user, inviter, url=url, **kwargs)

@@ -12,7 +12,7 @@ from six.moves.urllib.parse import urlparse
 
 from django.contrib.auth import get_user_model
 from django.core import mail
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import Http404
 from django.test import TestCase
 from django.utils.http import int_to_base36
@@ -82,7 +82,7 @@ class InviteTest(TestCase):
         self.assertTrue(sent)
         url_parts = int_to_base36(user.id), token_generator.make_token(user)
 
-        url = reverse('inviter2:register', args=url_parts)
+        url = reverse('register', args=url_parts)
 
         resp = self.client.get(url)
 
@@ -102,7 +102,7 @@ class InviteTest(TestCase):
 
         # self.client.login(username='testuser', password='test-1234')
 
-        resp = self.client.get(reverse('inviter2:done'))
+        resp = self.client.get(reverse('done'))
 
         self.assertEqual(200, resp.status_code, resp.status_code)
 
@@ -111,7 +111,7 @@ class InviteTest(TestCase):
         user, sent = invite("foo@example.com", self.inviter)
         self.assertTrue(sent)
         url_parts = 'z' * 13, token_generator.make_token(user)
-        url = reverse('inviter2:register', args=url_parts)
+        url = reverse('register', args=url_parts)
         resp = self.client.get(url)
         self.assertEqual(404, resp.status_code, resp.status_code)
 
@@ -120,7 +120,7 @@ class InviteTest(TestCase):
         self.assertTrue(sent)
         uid = int_to_base36(self.existing.id)
         token = token_generator.make_token(user)
-        url = reverse('inviter2:register', args=(uid, token))
+        url = reverse('register', args=(uid, token))
         resp = self.client.get(url)
         self.assertEqual(403, resp.status_code, resp.status_code)
 
@@ -128,7 +128,7 @@ class InviteTest(TestCase):
         user, sent = invite("foo@example.com", self.inviter)
         self.assertTrue(sent)
         url_parts = int_to_base36(user.id), token_generator.make_token(user)
-        url = reverse('inviter2:register', args=url_parts)
+        url = reverse('register', args=url_parts)
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code, resp.status_code)
         
@@ -167,14 +167,14 @@ class InviteTest(TestCase):
         self.assertEqual(3, User.objects.count())
 
         url_parts = int_to_base36(user.id), token_generator.make_token(user)
-        url = reverse('inviter2:opt-out', args=url_parts)
+        url = reverse('opt-out', args=url_parts)
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code, resp.status_code)
 
         resp = self.client.post(url, {})
         self.assertEqual(302, resp.status_code, resp.status_code)
-        self.assertEqual(reverse('inviter2:opt-out-done'),
+        self.assertEqual(reverse('opt-out-done'),
                          urlparse(resp['Location']).path)
         self.assertEqual(2, User.objects.count())
 
@@ -190,5 +190,5 @@ class InviteTest(TestCase):
         self.assertEqual(opt_out.__unicode__(), opt_hash)
 
     def test_opt_out_done(self):
-        resp = self.client.get(reverse('inviter2:opt-out-done'))
+        resp = self.client.get(reverse('opt-out-done'))
         self.assertEqual(200, resp.status_code, resp.status_code)

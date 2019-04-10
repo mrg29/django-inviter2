@@ -84,7 +84,7 @@ class Register(UserMixin, TemplateView):
 
     @property
     def redirect_url(self):
-        return getattr(settings, 'INVITER_REDIRECT', 'inviter2:done')
+        return getattr(settings, 'INVITER_REDIRECT', 'done')
 
     def get(self, request, user):
         context = {
@@ -133,7 +133,9 @@ class OptOut(UserMixin, TemplateView):
 
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('inviter2:opt-out-done'))
+            return HttpResponseRedirect(
+                reverse('opt-out-done', current_app='inviter2')
+            )
         return self.render_to_response({'form': form})
 
 
