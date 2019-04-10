@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.http import HttpResponseNotFound
 
 from django.contrib import admin
@@ -11,7 +11,6 @@ def render404(request):
 handler404 = 'example.urls.render404'
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^inviter/', include('inviter2.urls', namespace='inviter2')),
-)
+]
