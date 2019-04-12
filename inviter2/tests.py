@@ -12,17 +12,22 @@ from six.moves.urllib.parse import urlparse
 
 from django.contrib.auth import get_user_model
 from django.core import mail
-from django.urls import reverse
+from django.urls import reverse as _reverse
 from django.http import Http404
 from django.test import TestCase
 from django.utils.http import int_to_base36
 
+from . import settings
 from .models import OptOut
 from .utils import invite, token_generator
 from .views import UserMixin
 
 
 User = get_user_model()
+
+def reverse(view, *args, **kwargs):
+    view = '{}:{}'.format(settings.NAMESPACE, view)
+    return _reverse(view, *args, **kwargs)
 
 
 class InviteTest(TestCase):
@@ -144,13 +149,6 @@ class InviteTest(TestCase):
         self.assertEqual(200, resp.status_code, resp.content)
         self.assertIn(
             'The two password fields didn&#39;t match.', str(resp.content))
-
-        # developer with bad redirect URL
-        with self.settings(INVITER_REDIRECT='http://example.com/'):
-            fields.update(password2='test-1234')
-            resp = self.client.post(url, fields)
-            self.assertEqual(302, resp.status_code, resp.content)
-            self.assertEqual(resp['Location'], 'http://example.com/')
 
     def test_get_user(self):
         mixin = UserMixin()

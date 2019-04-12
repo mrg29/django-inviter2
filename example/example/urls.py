@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.conf import settings, urls
 from django.http import HttpResponseNotFound
 
 from django.contrib import admin
@@ -12,5 +12,8 @@ handler404 = 'example.urls.render404'
 
 
 urlpatterns = [
-    url(r'^inviter/', include('inviter2.urls')),
+    urls.url(
+        r'^inviter/',
+        urls.include(('inviter2.urls', settings.INVITER_NAMESPACE))
+    ),
 ]

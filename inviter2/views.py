@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 import importlib
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponseRedirect
@@ -11,23 +10,20 @@ from django.utils.http import base36_to_int
 from django.views.generic.base import TemplateView
 
 from .forms import OptOutForm
+from .settings import (
+    DONE_TEMPLATE,
+    FORM,
+    FORM_TEMPLATE,
+    FORM_USER_KWARG,
+    NAMESPACE,
+    OPTOUT_DONE_TEMPLATE,
+    OPTOUT_TEMPLATE,
+    REDIRECT_URL,
+    TOKEN_GENERATOR,
+)
 
 
 User = get_user_model()
-FORM = getattr(settings, 'INVITER_FORM', 'inviter2.forms.RegistrationForm')
-INVITER_FORM_USER_KWARG = getattr(
-    settings, 'INVITER_FORM_USER_KWARG', 'instance'
-)
-INVITER_FORM_TEMPLATE = getattr(
-    settings, 'INVITER_FORM_TEMPLATE', 'inviter2/register.html')
-INVITER_DONE_TEMPLATE = getattr(
-    settings, 'INVITER_DONE_TEMPLATE', 'inviter2/done.html')
-INVITER_OPTOUT_TEMPLATE = getattr(
-    settings, 'INVITER_OPTOUT_TEMPLATE', 'inviter2/opt-out.html')
-INVITER_OPTOUT_DONE_TEMPLATE = getattr(
-    settings, 'INVITER_OPTOUT_DONE_TEMPLATE', 'inviter2/opt-out-done.html')
-TOKEN_GENERATOR = getattr(
-    settings, 'INVITER_TOKEN_GENERATOR', 'inviter2.tokens.generator')
 
 
 def import_attribute(path):
@@ -79,37 +75,30 @@ class Register(UserMixin, TemplateView):
     can customize the form that is used.
     """
 
-    template_name = INVITER_FORM_TEMPLATE
+    template_name = FORM_TEMPLATE
     form = import_attribute(FORM)
-
-    @property
-    def redirect_url(self):
-        return getattr(settings, 'INVITER_REDIRECT', 'done')
 
     def get(self, request, user):
         context = {
             'invitee': user,
-            'form': self.form(**{INVITER_FORM_USER_KWARG: user})
+            'form': self.form(**{FORM_USER_KWARG: user})
         }
         return self.render_to_response(context)
 
     def post(self, request, user):
         form = self.form(**{
-            INVITER_FORM_USER_KWARG: user,
+            FORM_USER_KWARG: user,
             'data': request.POST
         })
 
         if form.is_valid():
             form.save()
-            try:
-                return HttpResponseRedirect(reverse(self.redirect_url))
-            except:
-                return HttpResponseRedirect(self.redirect_url)
+            return HttpResponseRedirect(reverse(REDIRECT_URL))
         return self.render_to_response({'invitee': user, 'form': form})
 
 
 class Done(TemplateView):
-    template_name = INVITER_DONE_TEMPLATE
+    template_name = DONE_TEMPLATE
 
     def get(self, request):
         return self.render_to_response({})
@@ -122,7 +111,7 @@ class OptOut(UserMixin, TemplateView):
     Which is happening in this view and :class:`inviter2.forms.OptOutForm`.
     """
 
-    template_name = INVITER_OPTOUT_TEMPLATE
+    template_name = OPTOUT_TEMPLATE
 
     def get(self, request, user):
         form = OptOutForm(instance=user)
@@ -134,13 +123,13 @@ class OptOut(UserMixin, TemplateView):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(
-                reverse('opt-out-done', current_app='inviter2')
+                reverse('{}:opt-out-done'.format(NAMESPACE))
             )
         return self.render_to_response({'form': form})
 
 
 class OptOutDone(TemplateView):
-    template_name = INVITER_OPTOUT_DONE_TEMPLATE
+    template_name = OPTOUT_DONE_TEMPLATE
 
     def get(self, request):
         return self.render_to_response({})
