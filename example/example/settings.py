@@ -19,3 +19,5 @@ INVITER_FORM_TEMPLATE = 'custom_register.html'
 INVITER_DONE_TEMPLATE = 'custom_done.html'
 INVITER_OPTOUT_TEMPLATE = 'custom_optout.html'
 INVITER_OPTOUT_DONE_TEMPLATE = 'custom_optout_done.html'
+
+INVITER_NAMESPACE = 'my-inviter'

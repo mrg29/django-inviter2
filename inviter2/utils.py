@@ -10,13 +10,11 @@ from django.urls import reverse
 from django.utils.http import int_to_base36
 
 from .models import OptOut
-from .views import import_attribute, TOKEN_GENERATOR
+from .settings import NAMESPACE, TOKEN_GENERATOR, FROM_EMAIL
+from .views import import_attribute
 
 
 User = get_user_model()
-FROM_EMAIL = getattr(settings, 'INVITER_FROM_EMAIL',
-                     settings.DEFAULT_FROM_EMAIL)
-
 token_generator = import_attribute(TOKEN_GENERATOR)
 
 
@@ -133,9 +131,9 @@ def invite(email, inviter, user=None, sendfn=send_invite, resend=True,
             user = create_inactive_user(email=email)
 
     url_parts = int_to_base36(user.id), token_generator.make_token(user)
-    url = reverse('register', args=url_parts, current_app='inviter2')
+    url = reverse('{}:register'.format(NAMESPACE), args=url_parts)
 
-    opt_out_url = reverse('opt-out', args=url_parts, current_app='inviter2')
+    opt_out_url = reverse('{}:opt-out'.format(NAMESPACE), args=url_parts)
     kwargs.update(opt_out_url=opt_out_url)
 
     sendfn(user, inviter, url=url, **kwargs)
