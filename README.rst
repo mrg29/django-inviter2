@@ -41,4 +41,4 @@ This is a fork of django-inviter_.
 
 Documentation is available via `Read the Docs`_
 
-.. _Read the Docs: http://django-inviter2.readthedocs.org/
+.. _Read the Docs: https://django-inviter2.readthedocs.org/
