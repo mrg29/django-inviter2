@@ -148,7 +148,9 @@ class InviteTest(TestCase):
         resp = self.client.post(url, fields)
         self.assertEqual(200, resp.status_code, resp.content)
         self.assertIn(
-            'The two password fields didn&#39;t match.', str(resp.content))
+            'The two password fields didn’t match.',
+            resp.content.decode('utf-8'),
+        )
 
     def test_get_user(self):
         mixin = UserMixin()
