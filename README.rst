@@ -36,7 +36,7 @@ History
 
 This is a fork of django-inviter_.
 
-.. _django-inviter: http://www.caffeinehit.com/work/code/django-inviter
+.. _django-inviter: https://github.com/caffeinehit/django-inviter
 
 
 Documentation is available via `Read the Docs`_
