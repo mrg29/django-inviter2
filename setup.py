@@ -28,7 +28,6 @@ setup(
     ],
     install_requires=[
         "shortuuid >= 0.1",
-        "six",
         "Django >= 1.4",
     ],
     include_package_data=True,

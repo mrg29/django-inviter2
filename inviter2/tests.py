@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 
 from shortuuid import uuid
 
-from six.moves.urllib.parse import urlparse
+from urllib.parse import urlparse
 
 from django.contrib.auth import get_user_model
 from django.core import mail
