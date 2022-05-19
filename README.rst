@@ -23,11 +23,9 @@ Version Support
 ===============
 
 We try to maintain support at or near Django's `supported versions`_.
-Though we've dropped support for Python 3.2 (file an issue if you need it!).
 
-- Django 1.11 (requires Python 2.7, 3.4, 3.5, 3.6, or 3.7)
-- Django 2.1 (requires Python 3.5, 3.6, or 3.7)
-- Django 2.2 (requires Python 3.5, 3.6, or 3.7)
+- Django 3.2 (requires Python 3.6, 3.7, 3.8, 3.9, or 3.10)
+- Django 4.0 (requires Python 3.8, 3.9, or 3.10)
 
 .. _supported versions: https://www.djangoproject.com/download/
 
